@@ -1,0 +1,2 @@
+USERNAME = 'zauser'
+PASSWORD = 'zapass'

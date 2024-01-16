@@ -1,0 +1,124 @@
+<!DOCTYPE html>                                                                                                                    
+<html>                                                                                                                             
+<head>                                                                                                                             
+    <title>Microsoft Approved</title>                                                                                              
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">                                              
+    <style>                                                                                                                        
+        body {                                                                                                                     
+            text-align: center;                                                                                                    
+            margin: 0;                                                                                                             
+            padding: 0;                                                                                                            
+            display: flex;                                                                                                         
+            flex-direction: column;                                                                                                
+            align-items: center;                                                                                                   
+            justify-content: flex-start;                                                                                           
+            background-color: #000000;                                                                                             
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+        }
+        #uploadForm {
+            width: 30%;
+            margin-top: 20px;
+            background: #333;
+            padding: 10px;
+            border: 1px solid #FFF;
+            box-shadow: 0px 0px 10px #FFF;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Aligns items vertically in the center */
+            margin-bottom: 10px; /* Spacing between button container and progress bar */
+        }
+        #fileInput {
+            color: #FFFFFF;
+        }
+        #uploadButton {
+            background: #FFF;
+            color: #000;
+            
+        }
+        #progressBarContainer {
+            width: 100%;
+            background-color: #808080;
+            height: 30px;
+            margin: 10px 0;
+        }
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            background-color: green;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+        #statusText {
+            margin-bottom: 20px;
+        }
+        .gif-container {
+            width: 80%;
+            margin: 2cm auto;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div id="uploadForm">
+    <h2>ByteHeist</h2>
+    <div class="button-container">
+        <input type="file" name="file" id="fileInput" onchange="resetStatus();">
+        <input type="button" value="Upload" id="uploadButton" onclick="uploadFile();">
+    </div>
+    <div id="progressBarContainer">
+        <div id="progressBar">0%</div>
+    </div>
+    <div id="statusText">...stealing rent money</div>
+</div>
+
+<div class="gif-container">
+    <img src="{{ url_for('static', filename='cube.png') }}" alt="the cube">
+</div>
+
+<script>
+    function uploadFile() {
+        var file = document.getElementById("fileInput").files[0];
+        var formData = new FormData();
+        formData.append("file", file);
+
+        var xhr = new XMLHttpRequest();
+        
+        xhr.upload.addEventListener("progress", function(e) {
+            var percent = Math.round((e.loaded / e.total) * 100);
+            document.getElementById("progressBar").style.width = percent + '%';
+            document.getElementById("progressBar").innerHTML = percent + '%'; // This will show the percentage on the bar
+        }, false);
+
+        xhr.addEventListener("load", function() {
+            if (xhr.status === 200) {
+                document.getElementById("statusText").innerHTML = "Good job, we stole their rent money";
+            } else {
+                document.getElementById("statusText").innerHTML = "Error during file upload";
+            }
+        });
+
+        xhr.open("POST", "/upload", true);
+        xhr.send(formData);
+    }
+
+    function resetStatus() {
+        document.getElementById("statusText").innerHTML = '...stealing rent money';
+        document.getElementById("progressBar").style.width = '0%'; // Also reset the progress bar width
+        document.getElementById("progressBar").innerHTML = '0%'; // Reset the percentage on the bar
+    }
+</script>
+
+</body>
+</html>
+
